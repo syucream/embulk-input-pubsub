@@ -10,6 +10,8 @@ import org.embulk.spi.PageBuilder
 import org.embulk.spi.json.JsonParser
 import org.embulk.spi.{Exec, InputPlugin, PageOutput, Schema}
 
+import scala.jdk.CollectionConverters._
+
 case class PubsubInputPlugin() extends InputPlugin {
   private val base64Encoder = Base64.getEncoder
   private val jsonParser = new JsonParser()
@@ -27,7 +29,7 @@ case class PubsubInputPlugin() extends InputPlugin {
     val task = config.loadConfig(classOf[PluginTask])
 
     val sub = PubsubBatchSubscriber.of(task)
-    task.setCheckpoints(sub.pull(task.getMaxMessages))
+    task.setCheckpoints(sub.pull(task.getMaxMessages).asJava)
 
     resume(task.dump(), schema, 1, control)
   }
@@ -62,7 +64,7 @@ case class PubsubInputPlugin() extends InputPlugin {
     val allocator = task.getBufferAllocator
     val pageBuilder = new PageBuilder(allocator, schema, output)
 
-    task.getCheckpoints.foreach { c =>
+    task.getCheckpoints.asScala.foreach { c =>
       pageBuilder.setString(
         pageBuilder.getSchema.getColumn(0),
         base64Encoder.encode(c.message.getData.toByteArray).toString

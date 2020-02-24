@@ -51,5 +51,5 @@ case class PubsubBatchSubscriber private (projectId: String, subscriptionName: S
 
 object PubsubBatchSubscriber {
   def of(task: PluginTask): PubsubBatchSubscriber =
-    PubsubBatchSubscriber(task.getProjectId, task.getSubscription, task.getJsonKeyfile)
+    PubsubBatchSubscriber(task.getProjectId, task.getSubscriptionId, task.getJsonKeyfile)
 }
