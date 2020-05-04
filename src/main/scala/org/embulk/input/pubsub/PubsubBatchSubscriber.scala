@@ -26,14 +26,14 @@ case class PubsubBatchSubscriber private (projectId: String, subscriptionName: S
     .setTransportChannelProvider(SubscriberStubSettings.defaultGrpcTransportProviderBuilder().build())
     .build()
 
-  def pull(count: Int): Try[Checkpoint] = {
+  def pull(count: Int, checkpointDir: Option[String]): Try[Checkpoint] = {
     val subscription = ProjectSubscriptionName.of(projectId, subscriptionName).toString
     val subscriber = GrpcSubscriberStub.create(settings)
 
     for {
       res <- pullImpl(subscriber, subscription, count)
       messages = res.getReceivedMessagesList.asScala
-      checkpoint = Checkpoint.withoutPersistency(messages.map(_.getMessage).toSeq)
+      checkpoint <- Checkpoint.create(messages.map(_.getMessage).toSeq, checkpointDir)
       _ <- ackImpl(subscriber, subscription, messages.map(_.getAckId))
     } yield checkpoint
   }

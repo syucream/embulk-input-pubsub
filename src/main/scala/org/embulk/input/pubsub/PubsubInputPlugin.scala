@@ -1,17 +1,23 @@
 package org.embulk.input.pubsub
 
 import java.nio.charset.StandardCharsets
-import java.util.Base64
-import java.util.{List => JList}
+import java.util.{Base64, Optional, List => JList}
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.embulk.config.{ConfigDiff, ConfigException, ConfigSource, TaskReport, TaskSource}
+import org.embulk.input.pubsub.checkpoint.Checkpoint
 import org.embulk.spi.`type`.Types
-import org.embulk.spi.PageBuilder
+import org.embulk.spi.{DataException, Exec, InputPlugin, PageBuilder, PageOutput, Schema}
 import org.embulk.spi.json.JsonParser
-import org.embulk.spi.{Exec, InputPlugin, PageOutput, Schema}
+import org.slf4j.LoggerFactory
+
+import scala.jdk.OptionConverters._
+import scala.jdk.CollectionConverters._
+import scala.util.Success
 
 case class PubsubInputPlugin() extends InputPlugin {
+  private val logger = LoggerFactory.getLogger(this.getClass)
+
   private val jsonParser = new JsonParser()
   private val objectMapper = new ObjectMapper()
 
@@ -27,7 +33,13 @@ case class PubsubInputPlugin() extends InputPlugin {
   ): ConfigDiff = {
     val task = config.loadConfig(classOf[PluginTask])
 
-    // TODO pull pubsub messages and preserve checkpoint here
+    if (!task.getCheckpoint.isPresent) {
+      val sub = PubsubBatchSubscriber.of(task)
+      val checkpoint = sub.pull(task.getMaxMessages, task.getCheckpointBasedir.toScala).get
+      task.setCheckpoint(Optional.of(checkpoint.id))
+
+      logger.info(s"Created a new checkpoint! : ${checkpoint.id}")
+    }
 
     resume(task.dump(), schema, task.getNumTasks, control)
   }
@@ -67,9 +79,12 @@ case class PubsubInputPlugin() extends InputPlugin {
       case e => throw new ConfigException(s"unsupported encoding: ${e}")
     }
 
-    val sub = PubsubBatchSubscriber.of(task)
-    val checkpoint = sub.pull(task.getMaxMessages).get
-    val messages = checkpoint.messages
+    val checkpointId = task.getCheckpoint.get()
+    val checkpoint = Checkpoint.from(checkpointId, task.getCheckpointBasedir.isPresent)
+    val messages = checkpoint match {
+      case Success(cp) => cp.content.getMessagesList.asScala
+      case _ => throw new DataException(s"unexpected checkpoint state: ${checkpoint}")
+    }
 
     messages.foreach { msg =>
       pageBuilder.setString(

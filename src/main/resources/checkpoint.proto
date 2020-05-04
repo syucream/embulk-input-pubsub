@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_outer_classname = "CheckpointProtos";
+option java_package = "com.embulk.input.pubsub.checkpoint";
+
+import "googleapis/google/pubsub/v1/pubsub.proto";
+
+message CheckpointContent {
+  repeated google.pubsub.v1.PubsubMessage messages = 1;
+}

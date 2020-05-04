@@ -1,5 +1,7 @@
 package org.embulk.input.pubsub
 
+import java.util.Optional
+
 import org.embulk.config.{Config, ConfigDefault, ConfigInject, Task}
 import org.embulk.spi.BufferAllocator
 
@@ -22,10 +24,14 @@ trait PluginTask extends Task {
   @ConfigDefault("10")
   def getMaxMessages: Int
 
-  /*
-  def getCheckpoint: Checkpoint
-  def setCheckpoint(checkpoint: Checkpoint): Unit
-  */
+  @Config("checkpoint_basedir")
+  @ConfigDefault("null")
+  def getCheckpointBasedir: Optional[String]
+
+  @Config("checkpoint")
+  @ConfigDefault("null")
+  def getCheckpoint: Optional[String]
+  def setCheckpoint(checkpoint: Optional[String]): Unit
 
   @Config("payload_encoding")
   @ConfigDefault("\"string\"")
