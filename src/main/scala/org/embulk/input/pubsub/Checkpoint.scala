@@ -2,9 +2,9 @@ package org.embulk.input.pubsub
 
 import com.google.pubsub.v1.PubsubMessage
 
-case class Checkpoint private (message: PubsubMessage)
+case class Checkpoint private (messages: Seq[PubsubMessage])
 
 object Checkpoint {
-  def withoutPersistency(message: PubsubMessage): Checkpoint =
-    Checkpoint(message)
+  def withoutPersistency(messages: Seq[PubsubMessage]): Checkpoint =
+    Checkpoint(messages)
 }

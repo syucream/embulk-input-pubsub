@@ -1,7 +1,5 @@
 package org.embulk.input.pubsub
 
-import java.util.{List => JList}
-
 import org.embulk.config.{Config, ConfigInject, Task}
 import org.embulk.spi.BufferAllocator
 
@@ -17,11 +15,13 @@ trait PluginTask extends Task {
   def getJsonKeyfile: String
 
   @Config("max_messages")
-  def getMaxMessages: Long
+  def getMaxMessages: Int
 
   @ConfigInject
   def getBufferAllocator: BufferAllocator
 
-  def getCheckpoints: JList[Checkpoint]
-  def setCheckpoints(checkpoints: JList[Checkpoint]): Unit
+  /*
+  def getCheckpoint: Checkpoint
+  def setCheckpoint(checkpoint: Checkpoint): Unit
+  */
 }

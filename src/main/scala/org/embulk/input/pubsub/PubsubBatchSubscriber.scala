@@ -1,52 +1,65 @@
 package org.embulk.input.pubsub
 
 import java.io.FileInputStream
-import java.time.{Duration, Instant}
 
 import com.google.api.gax.core.FixedCredentialsProvider
 import com.google.auth.oauth2.GoogleCredentials
-import com.google.cloud.pubsub.v1.{AckReplyConsumer, MessageReceiver, Subscriber}
-import com.google.pubsub.v1.{ProjectSubscriptionName, PubsubMessage}
+import com.google.cloud.pubsub.v1.stub.{GrpcSubscriberStub, SubscriberStubSettings}
+import com.google.protobuf.Empty
+import com.google.pubsub.v1.{AcknowledgeRequest, ProjectSubscriptionName, PullRequest, PullResponse}
 
-import scala.collection.mutable
+import scala.jdk.CollectionConverters._
+import scala.util.{Success, Try}
 
+/**
+ * A subscriber for Cloud Pub/Sub calls batch based pulls with checkpoint.
+ *
+ * @param projectId
+ * @param subscriptionName
+ * @param pathToCredJson
+ */
 case class PubsubBatchSubscriber private (projectId: String, subscriptionName: String, pathToCredJson: String) {
-  private val serviceAccount = new FileInputStream(pathToCredJson)
-  private val credentials = GoogleCredentials.fromStream(serviceAccount)
-
-  private val receiver = BoundedMessageReceiver()
-  private val sub = Subscriber
-    .newBuilder(ProjectSubscriptionName.of(projectId, subscriptionName), receiver)
+  private val credentials = GoogleCredentials.fromStream(new FileInputStream(pathToCredJson))
+  private val settings = SubscriberStubSettings.newBuilder()
     .setCredentialsProvider(FixedCredentialsProvider.create(credentials))
+    .setTransportChannelProvider(SubscriberStubSettings.defaultGrpcTransportProviderBuilder().build())
     .build()
 
-  def pull(count: Long, timeout: Duration = Duration.ofSeconds(30L)): Seq[Checkpoint] = {
-    sub.startAsync().awaitRunning()
+  def pull(count: Int): Try[Checkpoint] = {
+    val subscription = ProjectSubscriptionName.of(projectId, subscriptionName).toString
+    val subscriber = GrpcSubscriberStub.create(settings)
 
-    val startedAt = Instant.now()
-    while(receiver.count >= count || Instant.now.isAfter(startedAt.plus(timeout))) {
-      Thread.sleep(1000L)
-    }
-
-    sub.stopAsync()
-    sub.awaitRunning()
-
-    receiver.checkpoints.toSeq
+    for {
+      res <- pullImpl(subscriber, subscription, count)
+      messages = res.getReceivedMessagesList.asScala
+      checkpoint = Checkpoint.withoutPersistency(messages.map(_.getMessage).toSeq)
+      _ <- ackImpl(subscriber, subscription, messages.map(_.getAckId))
+    } yield checkpoint
   }
 
-  private case class BoundedMessageReceiver() extends MessageReceiver {
-    // TODO save to disk
-    val checkpoints = mutable.Seq.empty[Checkpoint]
+  private def pullImpl(subscriber: GrpcSubscriberStub, subscription: String, count: Int): Try[PullResponse] = {
+    val req = PullRequest.newBuilder()
+      .setSubscription(subscription)
+      .setReturnImmediately(true)
+      .setMaxMessages(count)
+      .build()
 
-    // metrics
-    var count: Long = 0L
+    Try(subscriber.pullCallable().call(req))
+  }
 
-    override def receiveMessage(message: PubsubMessage, consumer: AckReplyConsumer): Unit = {
-      checkpoints.appended(Checkpoint.withoutPersistency(message))
-      consumer.ack()
-      count = count + 1
+  private def ackImpl(subscriber: GrpcSubscriberStub, subscription: String, ackIds: Iterable[String]): Try[Empty] = {
+    if (ackIds.nonEmpty) {
+      val ack = AcknowledgeRequest.newBuilder()
+        .setSubscription(subscription)
+        .addAllAckIds(ackIds.asJava)
+        .build()
+
+      Try(subscriber.acknowledgeCallable().call(ack))
+    } else {
+      Success(Empty.getDefaultInstance)
     }
   }
+
 }
 
 object PubsubBatchSubscriber {

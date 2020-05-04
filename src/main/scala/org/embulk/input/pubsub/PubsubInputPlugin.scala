@@ -10,15 +10,13 @@ import org.embulk.spi.PageBuilder
 import org.embulk.spi.json.JsonParser
 import org.embulk.spi.{Exec, InputPlugin, PageOutput, Schema}
 
-import scala.jdk.CollectionConverters._
-
 case class PubsubInputPlugin() extends InputPlugin {
   private val base64Encoder = Base64.getEncoder
   private val jsonParser = new JsonParser()
   private val objectMapper = new ObjectMapper()
 
   private val schema = Schema.builder()
-    .add("payload", Types.JSON) // valid???
+    .add("payload", Types.STRING) // string or base64 encoded bytes
     .add("attribute", Types.JSON)
     .build()
 
@@ -28,8 +26,11 @@ case class PubsubInputPlugin() extends InputPlugin {
   ): ConfigDiff = {
     val task = config.loadConfig(classOf[PluginTask])
 
+    // TODO fix it
+    /*
     val sub = PubsubBatchSubscriber.of(task)
-    task.setCheckpoints(sub.pull(task.getMaxMessages).asJava)
+    task.setCheckpoint(sub.pull(task.getMaxMessages))
+     */
 
     resume(task.dump(), schema, 1, control)
   }
@@ -40,7 +41,6 @@ case class PubsubInputPlugin() extends InputPlugin {
       taskCount: Int,
       control: InputPlugin.Control
   ): ConfigDiff = {
-    // TODO support fault case
     control.run(taskSource, schema, taskCount)
     Exec.newConfigDiff()
   }
@@ -64,13 +64,16 @@ case class PubsubInputPlugin() extends InputPlugin {
     val allocator = task.getBufferAllocator
     val pageBuilder = new PageBuilder(allocator, schema, output)
 
-    task.getCheckpoints.asScala.foreach { c =>
+    val sub = PubsubBatchSubscriber.of(task)
+    val checkpoint = sub.pull(task.getMaxMessages).get
+
+    checkpoint.messages.foreach { msg =>
       pageBuilder.setString(
         pageBuilder.getSchema.getColumn(0),
-        base64Encoder.encode(c.message.getData.toByteArray).toString
+        base64Encoder.encodeToString(msg.getData.toByteArray)
       )
 
-      val json = objectMapper.writeValueAsString(c.message.getAttributesMap)
+      val json = objectMapper.writeValueAsString(msg.getAttributesMap)
       pageBuilder.setJson(
         pageBuilder.getSchema.getColumn(1),
         jsonParser.parse(json)

@@ -12,23 +12,25 @@ configurations {
 }
 
 // Relocate Guava packages since it's incompatible with Guava's version from Embulk
-/*
 shadowJar {
     classifier 'shadow'
 
     dependencies {
         include dependency('com.google.guava:guava')
+        include dependency('com.google.guava:failureaccess')
 
         include dependency('com.google.cloud:google-cloud-pubsub')
-
-        include dependency('io.grpc:grpc-netty-shaded')
-        include dependency('io.grpc:grpc-core')
+        include dependency('com.google.api:api-common')
+        include dependency('com.google.api:gax')
+        include dependency('com.google.api:gax-grpc')
         include dependency('io.grpc:grpc-api')
+        include dependency('io.grpc:grpc-core')
+        include dependency('io.grpc:grpc-netty-shaded')
+        include dependency('io.grpc:grpc-stub')
     }
 
     relocate 'com.google.common', 'relocated.com.google.common'
 }
- */
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -39,23 +41,18 @@ dependencies {
     compile 'org.embulk:embulk-core:0.9.12'
     provided 'org.embulk:embulk-core:0.9.12'
 
-    // Should be shadowed
     compile 'com.google.cloud:google-cloud-pubsub:1.100.0'
-    // compile 'com.google.firebase:firebase-admin:6.11.0'
-    // compile 'com.syucream:firesql:0.0.1'
+    compile 'com.google.guava:failureaccess:1.0.1'
 }
 
-task classpath(type: Copy, dependsOn: ['jar']) {
+task classpath(type: Copy, dependsOn: ['jar', 'shadowJar']) {
     doFirst { file('classpath').deleteDir() }
 
-    /*
     from (configurations.runtime
             - configurations.provided
             + configurations.shadow
             - files(shadowJar.getIncludedDependencies())
             + files(shadowJar.archiveFile))
-
-     */
 
     into 'classpath'
 }
@@ -76,7 +73,7 @@ Gem::Specification.new do |spec|
     spec.version       = "${project.version}"
     spec.authors       = ["Ryo Okubo"]
     spec.summary       = %[Google Cloud Pub/Sub input plugin for Embulk]
-    spec.description   = %[Selects records from a table.]
+    spec.description   = %[Selects records from Cloud Pub/Sub.]
     spec.email         = ["syucream@gmail.com"]
     spec.licenses      = ["Apache-2.0"]
     spec.homepage      = "https://github.com/syucream/embulk-input-pubsub"
