@@ -1,6 +1,6 @@
 package org.embulk.input.pubsub
 
-import org.embulk.config.{Config, ConfigInject, Task}
+import org.embulk.config.{Config, ConfigDefault, ConfigInject, Task}
 import org.embulk.spi.BufferAllocator
 
 trait PluginTask extends Task {
@@ -14,14 +14,23 @@ trait PluginTask extends Task {
   @Config("json_keyfile")
   def getJsonKeyfile: String
 
-  @Config("max_messages")
-  def getMaxMessages: Int
+  @Config("num_tasks")
+  @ConfigDefault("1")
+  def getNumTasks: Int
 
-  @ConfigInject
-  def getBufferAllocator: BufferAllocator
+  @Config("max_messages")
+  @ConfigDefault("10")
+  def getMaxMessages: Int
 
   /*
   def getCheckpoint: Checkpoint
   def setCheckpoint(checkpoint: Checkpoint): Unit
   */
+
+  @Config("payload_encoding")
+  @ConfigDefault("\"string\"")
+  def getPayloadEncoding: String
+
+  @ConfigInject
+  def getBufferAllocator: BufferAllocator
 }

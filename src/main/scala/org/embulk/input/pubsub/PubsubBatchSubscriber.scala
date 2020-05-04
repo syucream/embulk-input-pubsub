@@ -7,6 +7,7 @@ import com.google.auth.oauth2.GoogleCredentials
 import com.google.cloud.pubsub.v1.stub.{GrpcSubscriberStub, SubscriberStubSettings}
 import com.google.protobuf.Empty
 import com.google.pubsub.v1.{AcknowledgeRequest, ProjectSubscriptionName, PullRequest, PullResponse}
+import org.embulk.input.pubsub.checkpoint.Checkpoint
 
 import scala.jdk.CollectionConverters._
 import scala.util.{Success, Try}
