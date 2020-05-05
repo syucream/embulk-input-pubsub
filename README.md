@@ -1,5 +1,7 @@
 # embulk-input-pubsub
 
+[![Gem Version](https://badge.fury.io/rb/embulk-input-pubsub.svg)](https://badge.fury.io/rb/embulk-input-pubsub)
+
 [Google Cloud Pub/Sub](https://cloud.google.com/pubsub?hl=en) input plugin for Embulk. 
 
 ## Overview
