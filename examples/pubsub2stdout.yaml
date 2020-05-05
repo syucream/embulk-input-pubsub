@@ -1,11 +1,10 @@
 in:
   type: pubsub
-  project_id: deep-wares-182115
-  subscription_id: test
-  json_keyfile: ./credential.json
-  max_messages: 10
+  project_id: <your-project-id>
+  subscription_id: <your-subscription-name>
+  json_keyfile: /path/to/credential.json
+  max_messages: 100
   checkpoint_basedir: /tmp/embulk-input-pubsub/
-  # checkpoint: /tmp/embulk-input-pubsub/1568041000
 
 out:
   type: stdout
