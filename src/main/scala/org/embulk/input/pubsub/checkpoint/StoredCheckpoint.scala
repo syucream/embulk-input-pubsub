@@ -11,8 +11,8 @@ import scala.util.{Failure, Success, Try}
 import scala.jdk.CollectionConverters._
 
 /**
- * A checkpoint stored in a (maybe)persistent storage.
- */
+  * A checkpoint stored in a (maybe)persistent storage.
+  */
 sealed trait StoredCheckpoint {
   def id: String
   def content: Checkpoint
@@ -21,9 +21,9 @@ sealed trait StoredCheckpoint {
 
 object StoredCheckpoint {
   def create(
-              messages: Seq[PubsubMessage],
-              dir: Option[String]
-            ): Try[StoredCheckpoint] = {
+      messages: Seq[PubsubMessage],
+      dir: Option[String]
+  ): Try[StoredCheckpoint] = {
     dir match {
       case Some(d) =>
         LocalFileStoredCheckpoint.withPersistency(d, messages)
@@ -46,19 +46,22 @@ object StoredCheckpoint {
 }
 
 /**
- * A checkpoint stored in only memory which doesn't have persistence.
- *
- * @param id
- * @param content
- */
-case class MemoryStoredStoredCheckpoint private(id: String, content: Checkpoint)
-    extends StoredCheckpoint {
+  * A checkpoint stored in only memory which doesn't have persistence.
+  *
+  * @param id
+  * @param content
+  */
+case class MemoryStoredStoredCheckpoint private (
+    id: String,
+    content: Checkpoint
+) extends StoredCheckpoint {
   import MemoryStoredStoredCheckpoint._
 
   override def cleanup: Try[Unit] = {
     storage.remove(id) match {
       case Some(_) => Success(())
-      case _ => Failure(new ConfigException(s"A checkpoint ${id} is not deletable"))
+      case _ =>
+        Failure(new ConfigException(s"A checkpoint ${id} is not deletable"))
     }
   }
 }
@@ -78,12 +81,12 @@ object MemoryStoredStoredCheckpoint {
 }
 
 /**
- * A checkpoint stored in local filesystem.
- *
- * @param id
- * @param content
- */
-case class LocalFileStoredCheckpoint private(id: String, content: Checkpoint)
+  * A checkpoint stored in local filesystem.
+  *
+  * @param id
+  * @param content
+  */
+case class LocalFileStoredCheckpoint private (id: String, content: Checkpoint)
     extends StoredCheckpoint {
   override def cleanup: Try[Unit] = {
     for {
@@ -118,4 +121,3 @@ object LocalFileStoredCheckpoint {
     } yield LocalFileStoredCheckpoint(path, content)
   }
 }
-

@@ -4,10 +4,23 @@ import java.nio.charset.StandardCharsets
 import java.util.{Base64, Optional, List => JList}
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import org.embulk.config.{ConfigDiff, ConfigException, ConfigSource, TaskReport, TaskSource}
+import org.embulk.config.{
+  ConfigDiff,
+  ConfigException,
+  ConfigSource,
+  TaskReport,
+  TaskSource
+}
 import org.embulk.input.pubsub.checkpoint.StoredCheckpoint
 import org.embulk.spi.`type`.Types
-import org.embulk.spi.{DataException, Exec, InputPlugin, PageBuilder, PageOutput, Schema}
+import org.embulk.spi.{
+  DataException,
+  Exec,
+  InputPlugin,
+  PageBuilder,
+  PageOutput,
+  Schema
+}
 import org.embulk.spi.json.JsonParser
 import org.slf4j.LoggerFactory
 
@@ -35,7 +48,8 @@ case class PubsubInputPlugin() extends InputPlugin {
 
     if (!task.getCheckpoint.isPresent) {
       val sub = PubsubBatchSubscriber.of(task)
-      val checkpoint = sub.pull(task.getMaxMessages, task.getCheckpointBasedir.toScala).get
+      val checkpoint =
+        sub.pull(task.getMaxMessages, task.getCheckpointBasedir.toScala).get
       task.setCheckpoint(Optional.of(checkpoint.id))
 
       logger.info(s"Created a new checkpoint! : ${checkpoint.id}")
@@ -63,14 +77,16 @@ case class PubsubInputPlugin() extends InputPlugin {
     val task = taskSource.loadTask(classOf[PluginTask])
 
     val checkpointId = task.getCheckpoint.get()
-    val checkpoint = StoredCheckpoint.from(checkpointId, task.getCheckpointBasedir.isPresent)
+    val checkpoint =
+      StoredCheckpoint.from(checkpointId, task.getCheckpointBasedir.isPresent)
     checkpoint match {
       case Success(sc) =>
         sc.cleanup match {
           case Success(_) =>
           case Failure(e) => logger.error(s"failed to cleanup: ${e.toString}")
         }
-      case Failure(e) => logger.error(s"failed to fetch checkpoint: ${e.toString}")
+      case Failure(e) =>
+        logger.error(s"failed to fetch checkpoint: ${e.toString}")
     }
   }
 
@@ -85,16 +101,20 @@ case class PubsubInputPlugin() extends InputPlugin {
     val pageBuilder = new PageBuilder(allocator, schema, output)
 
     val encoder = task.getPayloadEncoding match {
-      case "string" => (data: Array[Byte]) => new String(data, StandardCharsets.UTF_8)
-      case "binary" => (data: Array[Byte]) => Base64.getEncoder.encodeToString(data)
+      case "string" =>
+        (data: Array[Byte]) => new String(data, StandardCharsets.UTF_8)
+      case "binary" =>
+        (data: Array[Byte]) => Base64.getEncoder.encodeToString(data)
       case e => throw new ConfigException(s"unsupported encoding: ${e}")
     }
 
     val checkpointId = task.getCheckpoint.get()
-    val checkpoint = StoredCheckpoint.from(checkpointId, task.getCheckpointBasedir.isPresent)
+    val checkpoint =
+      StoredCheckpoint.from(checkpointId, task.getCheckpointBasedir.isPresent)
     val messages = checkpoint match {
       case Success(cp) => cp.content.getMessagesList.asScala
-      case _ => throw new DataException(s"unexpected checkpoint state: ${checkpoint}")
+      case _ =>
+        throw new DataException(s"unexpected checkpoint state: ${checkpoint}")
     }
 
     messages.foreach { msg =>
