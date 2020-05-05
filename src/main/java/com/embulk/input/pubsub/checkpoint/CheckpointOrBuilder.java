@@ -3,8 +3,8 @@
 
 package com.embulk.input.pubsub.checkpoint;
 
-public interface CheckpointContentOrBuilder extends
-    // @@protoc_insertion_point(interface_extends:CheckpointContent)
+public interface CheckpointOrBuilder extends
+    // @@protoc_insertion_point(interface_extends:Checkpoint)
     com.google.protobuf.MessageOrBuilder {
 
   /**

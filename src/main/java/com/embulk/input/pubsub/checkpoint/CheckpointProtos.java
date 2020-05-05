@@ -15,10 +15,10 @@ public final class CheckpointProtos {
         (com.google.protobuf.ExtensionRegistryLite) registry);
   }
   static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_CheckpointContent_descriptor;
+    internal_static_Checkpoint_descriptor;
   static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_CheckpointContent_fieldAccessorTable;
+      internal_static_Checkpoint_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -30,10 +30,10 @@ public final class CheckpointProtos {
     java.lang.String[] descriptorData = {
       "\n#src/main/resources/checkpoint.proto\032(g" +
       "oogleapis/google/pubsub/v1/pubsub.proto\"" +
-      "F\n\021CheckpointContent\0221\n\010messages\030\001 \003(\0132\037" +
-      ".google.pubsub.v1.PubsubMessageB8\n\"com.e" +
-      "mbulk.input.pubsub.checkpointB\020Checkpoin" +
-      "tProtosP\001b\006proto3"
+      "?\n\nCheckpoint\0221\n\010messages\030\001 \003(\0132\037.google" +
+      ".pubsub.v1.PubsubMessageB8\n\"com.embulk.i" +
+      "nput.pubsub.checkpointB\020CheckpointProtos" +
+      "P\001b\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -48,11 +48,11 @@ public final class CheckpointProtos {
         new com.google.protobuf.Descriptors.FileDescriptor[] {
           com.google.pubsub.v1.PubsubProto.getDescriptor(),
         }, assigner);
-    internal_static_CheckpointContent_descriptor =
+    internal_static_Checkpoint_descriptor =
       getDescriptor().getMessageTypes().get(0);
-    internal_static_CheckpointContent_fieldAccessorTable = new
+    internal_static_Checkpoint_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_CheckpointContent_descriptor,
+        internal_static_Checkpoint_descriptor,
         new java.lang.String[] { "Messages", });
     com.google.pubsub.v1.PubsubProto.getDescriptor();
   }

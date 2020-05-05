@@ -4,18 +4,18 @@
 package com.embulk.input.pubsub.checkpoint;
 
 /**
- * Protobuf type {@code CheckpointContent}
+ * Protobuf type {@code Checkpoint}
  */
-public  final class CheckpointContent extends
+public  final class Checkpoint extends
     com.google.protobuf.GeneratedMessageV3 implements
-    // @@protoc_insertion_point(message_implements:CheckpointContent)
-    CheckpointContentOrBuilder {
+    // @@protoc_insertion_point(message_implements:Checkpoint)
+    CheckpointOrBuilder {
 private static final long serialVersionUID = 0L;
-  // Use CheckpointContent.newBuilder() to construct.
-  private CheckpointContent(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+  // Use Checkpoint.newBuilder() to construct.
+  private Checkpoint(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
     super(builder);
   }
-  private CheckpointContent() {
+  private Checkpoint() {
     messages_ = java.util.Collections.emptyList();
   }
 
@@ -24,7 +24,7 @@ private static final long serialVersionUID = 0L;
   getUnknownFields() {
     return this.unknownFields;
   }
-  private CheckpointContent(
+  private Checkpoint(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
@@ -76,14 +76,14 @@ private static final long serialVersionUID = 0L;
   }
   public static final com.google.protobuf.Descriptors.Descriptor
       getDescriptor() {
-    return com.embulk.input.pubsub.checkpoint.CheckpointProtos.internal_static_CheckpointContent_descriptor;
+    return com.embulk.input.pubsub.checkpoint.CheckpointProtos.internal_static_Checkpoint_descriptor;
   }
 
   protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internalGetFieldAccessorTable() {
-    return com.embulk.input.pubsub.checkpoint.CheckpointProtos.internal_static_CheckpointContent_fieldAccessorTable
+    return com.embulk.input.pubsub.checkpoint.CheckpointProtos.internal_static_Checkpoint_fieldAccessorTable
         .ensureFieldAccessorsInitialized(
-            com.embulk.input.pubsub.checkpoint.CheckpointContent.class, com.embulk.input.pubsub.checkpoint.CheckpointContent.Builder.class);
+            com.embulk.input.pubsub.checkpoint.Checkpoint.class, com.embulk.input.pubsub.checkpoint.Checkpoint.Builder.class);
   }
 
   public static final int MESSAGES_FIELD_NUMBER = 1;
@@ -158,10 +158,10 @@ private static final long serialVersionUID = 0L;
     if (obj == this) {
      return true;
     }
-    if (!(obj instanceof com.embulk.input.pubsub.checkpoint.CheckpointContent)) {
+    if (!(obj instanceof com.embulk.input.pubsub.checkpoint.Checkpoint)) {
       return super.equals(obj);
     }
-    com.embulk.input.pubsub.checkpoint.CheckpointContent other = (com.embulk.input.pubsub.checkpoint.CheckpointContent) obj;
+    com.embulk.input.pubsub.checkpoint.Checkpoint other = (com.embulk.input.pubsub.checkpoint.Checkpoint) obj;
 
     boolean result = true;
     result = result && getMessagesList()
@@ -186,69 +186,69 @@ private static final long serialVersionUID = 0L;
     return hash;
   }
 
-  public static com.embulk.input.pubsub.checkpoint.CheckpointContent parseFrom(
+  public static com.embulk.input.pubsub.checkpoint.Checkpoint parseFrom(
       java.nio.ByteBuffer data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static com.embulk.input.pubsub.checkpoint.CheckpointContent parseFrom(
+  public static com.embulk.input.pubsub.checkpoint.Checkpoint parseFrom(
       java.nio.ByteBuffer data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static com.embulk.input.pubsub.checkpoint.CheckpointContent parseFrom(
+  public static com.embulk.input.pubsub.checkpoint.Checkpoint parseFrom(
       com.google.protobuf.ByteString data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static com.embulk.input.pubsub.checkpoint.CheckpointContent parseFrom(
+  public static com.embulk.input.pubsub.checkpoint.Checkpoint parseFrom(
       com.google.protobuf.ByteString data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static com.embulk.input.pubsub.checkpoint.CheckpointContent parseFrom(byte[] data)
+  public static com.embulk.input.pubsub.checkpoint.Checkpoint parseFrom(byte[] data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static com.embulk.input.pubsub.checkpoint.CheckpointContent parseFrom(
+  public static com.embulk.input.pubsub.checkpoint.Checkpoint parseFrom(
       byte[] data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static com.embulk.input.pubsub.checkpoint.CheckpointContent parseFrom(java.io.InputStream input)
+  public static com.embulk.input.pubsub.checkpoint.Checkpoint parseFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static com.embulk.input.pubsub.checkpoint.CheckpointContent parseFrom(
+  public static com.embulk.input.pubsub.checkpoint.Checkpoint parseFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input, extensionRegistry);
   }
-  public static com.embulk.input.pubsub.checkpoint.CheckpointContent parseDelimitedFrom(java.io.InputStream input)
+  public static com.embulk.input.pubsub.checkpoint.Checkpoint parseDelimitedFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input);
   }
-  public static com.embulk.input.pubsub.checkpoint.CheckpointContent parseDelimitedFrom(
+  public static com.embulk.input.pubsub.checkpoint.Checkpoint parseDelimitedFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
   }
-  public static com.embulk.input.pubsub.checkpoint.CheckpointContent parseFrom(
+  public static com.embulk.input.pubsub.checkpoint.Checkpoint parseFrom(
       com.google.protobuf.CodedInputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static com.embulk.input.pubsub.checkpoint.CheckpointContent parseFrom(
+  public static com.embulk.input.pubsub.checkpoint.Checkpoint parseFrom(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
@@ -260,7 +260,7 @@ private static final long serialVersionUID = 0L;
   public static Builder newBuilder() {
     return DEFAULT_INSTANCE.toBuilder();
   }
-  public static Builder newBuilder(com.embulk.input.pubsub.checkpoint.CheckpointContent prototype) {
+  public static Builder newBuilder(com.embulk.input.pubsub.checkpoint.Checkpoint prototype) {
     return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
   }
   public Builder toBuilder() {
@@ -275,25 +275,25 @@ private static final long serialVersionUID = 0L;
     return builder;
   }
   /**
-   * Protobuf type {@code CheckpointContent}
+   * Protobuf type {@code Checkpoint}
    */
   public static final class Builder extends
       com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-      // @@protoc_insertion_point(builder_implements:CheckpointContent)
-      com.embulk.input.pubsub.checkpoint.CheckpointContentOrBuilder {
+      // @@protoc_insertion_point(builder_implements:Checkpoint)
+      com.embulk.input.pubsub.checkpoint.CheckpointOrBuilder {
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return com.embulk.input.pubsub.checkpoint.CheckpointProtos.internal_static_CheckpointContent_descriptor;
+      return com.embulk.input.pubsub.checkpoint.CheckpointProtos.internal_static_Checkpoint_descriptor;
     }
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return com.embulk.input.pubsub.checkpoint.CheckpointProtos.internal_static_CheckpointContent_fieldAccessorTable
+      return com.embulk.input.pubsub.checkpoint.CheckpointProtos.internal_static_Checkpoint_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              com.embulk.input.pubsub.checkpoint.CheckpointContent.class, com.embulk.input.pubsub.checkpoint.CheckpointContent.Builder.class);
+              com.embulk.input.pubsub.checkpoint.Checkpoint.class, com.embulk.input.pubsub.checkpoint.Checkpoint.Builder.class);
     }
 
-    // Construct using com.embulk.input.pubsub.checkpoint.CheckpointContent.newBuilder()
+    // Construct using com.embulk.input.pubsub.checkpoint.Checkpoint.newBuilder()
     private Builder() {
       maybeForceBuilderInitialization();
     }
@@ -322,23 +322,23 @@ private static final long serialVersionUID = 0L;
 
     public com.google.protobuf.Descriptors.Descriptor
         getDescriptorForType() {
-      return com.embulk.input.pubsub.checkpoint.CheckpointProtos.internal_static_CheckpointContent_descriptor;
+      return com.embulk.input.pubsub.checkpoint.CheckpointProtos.internal_static_Checkpoint_descriptor;
     }
 
-    public com.embulk.input.pubsub.checkpoint.CheckpointContent getDefaultInstanceForType() {
-      return com.embulk.input.pubsub.checkpoint.CheckpointContent.getDefaultInstance();
+    public com.embulk.input.pubsub.checkpoint.Checkpoint getDefaultInstanceForType() {
+      return com.embulk.input.pubsub.checkpoint.Checkpoint.getDefaultInstance();
     }
 
-    public com.embulk.input.pubsub.checkpoint.CheckpointContent build() {
-      com.embulk.input.pubsub.checkpoint.CheckpointContent result = buildPartial();
+    public com.embulk.input.pubsub.checkpoint.Checkpoint build() {
+      com.embulk.input.pubsub.checkpoint.Checkpoint result = buildPartial();
       if (!result.isInitialized()) {
         throw newUninitializedMessageException(result);
       }
       return result;
     }
 
-    public com.embulk.input.pubsub.checkpoint.CheckpointContent buildPartial() {
-      com.embulk.input.pubsub.checkpoint.CheckpointContent result = new com.embulk.input.pubsub.checkpoint.CheckpointContent(this);
+    public com.embulk.input.pubsub.checkpoint.Checkpoint buildPartial() {
+      com.embulk.input.pubsub.checkpoint.Checkpoint result = new com.embulk.input.pubsub.checkpoint.Checkpoint(this);
       int from_bitField0_ = bitField0_;
       if (messagesBuilder_ == null) {
         if (((bitField0_ & 0x00000001) == 0x00000001)) {
@@ -380,16 +380,16 @@ private static final long serialVersionUID = 0L;
       return (Builder) super.addRepeatedField(field, value);
     }
     public Builder mergeFrom(com.google.protobuf.Message other) {
-      if (other instanceof com.embulk.input.pubsub.checkpoint.CheckpointContent) {
-        return mergeFrom((com.embulk.input.pubsub.checkpoint.CheckpointContent)other);
+      if (other instanceof com.embulk.input.pubsub.checkpoint.Checkpoint) {
+        return mergeFrom((com.embulk.input.pubsub.checkpoint.Checkpoint)other);
       } else {
         super.mergeFrom(other);
         return this;
       }
     }
 
-    public Builder mergeFrom(com.embulk.input.pubsub.checkpoint.CheckpointContent other) {
-      if (other == com.embulk.input.pubsub.checkpoint.CheckpointContent.getDefaultInstance()) return this;
+    public Builder mergeFrom(com.embulk.input.pubsub.checkpoint.Checkpoint other) {
+      if (other == com.embulk.input.pubsub.checkpoint.Checkpoint.getDefaultInstance()) return this;
       if (messagesBuilder_ == null) {
         if (!other.messages_.isEmpty()) {
           if (messages_.isEmpty()) {
@@ -429,11 +429,11 @@ private static final long serialVersionUID = 0L;
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      com.embulk.input.pubsub.checkpoint.CheckpointContent parsedMessage = null;
+      com.embulk.input.pubsub.checkpoint.Checkpoint parsedMessage = null;
       try {
         parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        parsedMessage = (com.embulk.input.pubsub.checkpoint.CheckpointContent) e.getUnfinishedMessage();
+        parsedMessage = (com.embulk.input.pubsub.checkpoint.Checkpoint) e.getUnfinishedMessage();
         throw e.unwrapIOException();
       } finally {
         if (parsedMessage != null) {
@@ -694,39 +694,39 @@ private static final long serialVersionUID = 0L;
     }
 
 
-    // @@protoc_insertion_point(builder_scope:CheckpointContent)
+    // @@protoc_insertion_point(builder_scope:Checkpoint)
   }
 
-  // @@protoc_insertion_point(class_scope:CheckpointContent)
-  private static final com.embulk.input.pubsub.checkpoint.CheckpointContent DEFAULT_INSTANCE;
+  // @@protoc_insertion_point(class_scope:Checkpoint)
+  private static final com.embulk.input.pubsub.checkpoint.Checkpoint DEFAULT_INSTANCE;
   static {
-    DEFAULT_INSTANCE = new com.embulk.input.pubsub.checkpoint.CheckpointContent();
+    DEFAULT_INSTANCE = new com.embulk.input.pubsub.checkpoint.Checkpoint();
   }
 
-  public static com.embulk.input.pubsub.checkpoint.CheckpointContent getDefaultInstance() {
+  public static com.embulk.input.pubsub.checkpoint.Checkpoint getDefaultInstance() {
     return DEFAULT_INSTANCE;
   }
 
-  private static final com.google.protobuf.Parser<CheckpointContent>
-      PARSER = new com.google.protobuf.AbstractParser<CheckpointContent>() {
-    public CheckpointContent parsePartialFrom(
+  private static final com.google.protobuf.Parser<Checkpoint>
+      PARSER = new com.google.protobuf.AbstractParser<Checkpoint>() {
+    public Checkpoint parsePartialFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return new CheckpointContent(input, extensionRegistry);
+      return new Checkpoint(input, extensionRegistry);
     }
   };
 
-  public static com.google.protobuf.Parser<CheckpointContent> parser() {
+  public static com.google.protobuf.Parser<Checkpoint> parser() {
     return PARSER;
   }
 
   @java.lang.Override
-  public com.google.protobuf.Parser<CheckpointContent> getParserForType() {
+  public com.google.protobuf.Parser<Checkpoint> getParserForType() {
     return PARSER;
   }
 
-  public com.embulk.input.pubsub.checkpoint.CheckpointContent getDefaultInstanceForType() {
+  public com.embulk.input.pubsub.checkpoint.Checkpoint getDefaultInstanceForType() {
     return DEFAULT_INSTANCE;
   }
 

@@ -6,6 +6,6 @@ option java_package = "com.embulk.input.pubsub.checkpoint";
 
 import "googleapis/google/pubsub/v1/pubsub.proto";
 
-message CheckpointContent {
+message Checkpoint {
   repeated google.pubsub.v1.PubsubMessage messages = 1;
 }

@@ -5,7 +5,7 @@ import java.util.{Base64, Optional, List => JList}
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.embulk.config.{ConfigDiff, ConfigException, ConfigSource, TaskReport, TaskSource}
-import org.embulk.input.pubsub.checkpoint.Checkpoint
+import org.embulk.input.pubsub.checkpoint.StoredCheckpoint
 import org.embulk.spi.`type`.Types
 import org.embulk.spi.{DataException, Exec, InputPlugin, PageBuilder, PageOutput, Schema}
 import org.embulk.spi.json.JsonParser
@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory
 
 import scala.jdk.OptionConverters._
 import scala.jdk.CollectionConverters._
-import scala.util.Success
+import scala.util.{Failure, Success}
 
 case class PubsubInputPlugin() extends InputPlugin {
   private val logger = LoggerFactory.getLogger(this.getClass)
@@ -60,7 +60,18 @@ case class PubsubInputPlugin() extends InputPlugin {
       taskCount: Int,
       successTaskReports: JList[TaskReport]
   ): Unit = {
-    // nothing to do
+    val task = taskSource.loadTask(classOf[PluginTask])
+
+    val checkpointId = task.getCheckpoint.get()
+    val checkpoint = StoredCheckpoint.from(checkpointId, task.getCheckpointBasedir.isPresent)
+    checkpoint match {
+      case Success(sc) =>
+        sc.cleanup match {
+          case Success(_) =>
+          case Failure(e) => logger.error(s"failed to cleanup: ${e.toString}")
+        }
+      case Failure(e) => logger.error(s"failed to fetch checkpoint: ${e.toString}")
+    }
   }
 
   override def run(
@@ -80,7 +91,7 @@ case class PubsubInputPlugin() extends InputPlugin {
     }
 
     val checkpointId = task.getCheckpoint.get()
-    val checkpoint = Checkpoint.from(checkpointId, task.getCheckpointBasedir.isPresent)
+    val checkpoint = StoredCheckpoint.from(checkpointId, task.getCheckpointBasedir.isPresent)
     val messages = checkpoint match {
       case Success(cp) => cp.content.getMessagesList.asScala
       case _ => throw new DataException(s"unexpected checkpoint state: ${checkpoint}")
